@@ -32,13 +32,25 @@ void DrawingPanel::OnPaint(wxPaintEvent& event)
     context->SetBrush(*wxWHITE);
 
     // draw something on the drawing panel by calling the DrawRectangle method on the graphics context
-    context->DrawRectangle(40, 25, 100, 100);
+    //context->DrawRectangle(40, 25, 100, 100);
 
-    // Try creating some more shapes
-    context->DrawEllipse(40, 25, 50, 50);
+    //// Try creating some more shapes
+    //context->DrawEllipse(40, 25, 50, 50);
 
-    context->SetBrush(*wxGREEN);
-    context->DrawEllipse(90, 75, 50, 50);
+    //context->SetBrush(*wxGREEN);
+    //context->DrawEllipse(90, 75, 50, 50);
+
+    // For now cell width/height can be assumed to be 10
+    int cellSize = 10;
+
+    // It now time to create the grid | The rectangles will need to be creating using a series of loops using some math
+    for (int row = 0; row < gridSize; ++row) {
+        for (int col = 0; col < gridSize; ++col) {
+            int x = col * cellSize;
+            int y = row * cellSize;
+            context->DrawRectangle(x, y, cellSize, cellSize);
+        }
+    }
 
     delete context;
 }
