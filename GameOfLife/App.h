@@ -12,5 +12,6 @@ public:
 	App();
 	~App();
 	virtual bool OnInit();
+	virtual int OnExit();
 };
 
