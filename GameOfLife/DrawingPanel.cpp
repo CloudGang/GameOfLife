@@ -40,17 +40,37 @@ void DrawingPanel::OnPaint(wxPaintEvent& event)
     //context->SetBrush(*wxGREEN);
     //context->DrawEllipse(90, 75, 50, 50);
 
-    // For now cell width/height can be assumed to be 10
-    int cellSize = 10;
+    //////////////////////////////////////////////////////////////////
 
-    // It now time to create the grid | The rectangles will need to be creating using a series of loops using some math
+    // For now cell width/height can be assumed to be 10
+    //int cellSize = 10;
+
+    //// It now time to create the grid | The rectangles will need to be creating using a series of loops using some math
+    //for (int row = 0; row < gridSize; ++row) {
+    //    for (int col = 0; col < gridSize; ++col) {
+    //        int x = col * cellSize;
+    //        int y = row * cellSize;
+    //        context->DrawRectangle(x, y, cellSize, cellSize);
+    //    }
+    //}
+
+    //////////////////////////////////////////////////////////////////
+    
+    // get the size of the panel
+    int panelWidth, panelHeight;
+    this->GetClientSize(&panelWidth, &panelHeight);
+
+    // cell size calculation | They need to be calculated separately.
+    int cellWidth = panelWidth / gridSize;
+    int cellHeight = panelHeight / gridSize;
+
+    // create the grid
     for (int row = 0; row < gridSize; ++row) {
         for (int col = 0; col < gridSize; ++col) {
-            int x = col * cellSize;
-            int y = row * cellSize;
-            context->DrawRectangle(x, y, cellSize, cellSize);
+            int x = col * cellWidth;
+            int y = row * cellHeight;
+            context->DrawRectangle(x, y, cellWidth, cellHeight);
         }
     }
-
     delete context;
 }
