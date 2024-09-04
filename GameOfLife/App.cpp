@@ -15,7 +15,7 @@ bool App::OnInit() {
 
 	//Instantiate the MainWindow pointer
 	mainWin = new MainWindow();
-	//Call the Show() method on the pointer
+	//Call the Show() method on the pointer 
 	mainWin->Show();
 	return true;
 }
