@@ -25,6 +25,12 @@ private:
     // toolbar
     wxToolBar* toolBar;
 
+    // timer
+    wxTimer* timer;
+    static const int TIMER_ID = 10000;
+    static const int TIMER_INTERVAL = 50;
+
+
 public:
     MainWindow();
     ~MainWindow();
@@ -35,6 +41,7 @@ public:
     void OnPause(wxCommandEvent& event);
     void OnNext(wxCommandEvent& event);
     void OnClear(wxCommandEvent& event);
+    void OnTimer(wxTimerEvent& event);
 
     // access game board
     std::vector<std::vector<bool>>& GetGameBoard() { 

@@ -11,6 +11,7 @@ wxBEGIN_EVENT_TABLE(MainWindow, wxFrame)
 	EVT_MENU(10002, MainWindow::OnPause)
 	EVT_MENU(10003, MainWindow::OnNext)
 	EVT_MENU(10004, MainWindow::OnClear)
+	EVT_TIMER(TIMER_ID, MainWindow::OnTimer)
 wxEND_EVENT_TABLE()
 
 
@@ -46,11 +47,15 @@ MainWindow::MainWindow() : wxFrame(nullptr, wxID_ANY, "Game of Life", wxPoint(0,
 	// finalize toolbar setup
 	toolBar->Realize();
 
+	// timer initialize
+	timer = new wxTimer(this, TIMER_ID);
+
 	// refresh its layout by adding this->Layout()
 	this->Layout();
 }
 
 MainWindow::~MainWindow() {
+	delete timer;
 }
 
 void MainWindow::OnSizeChange(wxSizeEvent& event) {
@@ -67,11 +72,13 @@ void MainWindow::OnSizeChange(wxSizeEvent& event) {
 	event.Skip();
 }
 
-// leave empty for now
+
 void MainWindow::OnPlay(wxCommandEvent& event) {
+	timer->Start(TIMER_INTERVAL);
 }
 
 void MainWindow::OnPause(wxCommandEvent& event) {
+	timer->Stop();
 }
 
 void MainWindow::OnNext(wxCommandEvent& event) {
@@ -83,11 +90,8 @@ void MainWindow::OnClear(wxCommandEvent& event) {
 }
 
 void MainWindow::UpdateStatusBar() {
-	wxString generationText = wxString::Format("Generations: %i", generationCount);
-	wxString livingCellsText = wxString::Format("Living Cells: %i", livingCellsCount);
-
-	statusBar->SetStatusText(generationText, 0);
-	statusBar->SetStatusText(livingCellsText, 1);
+	statusBar->SetStatusText(wxString::Format("Generation: %d", generationCount), 0);
+	statusBar->SetStatusText(wxString::Format("Living Cells: %d", livingCellsCount), 1);
 }
 
 int MainWindow::CountLivingNeighbors(int row, int col) const {
@@ -181,4 +185,8 @@ void MainWindow::ClearBoard() {
 	UpdateStatusBar();
 
 	drawingPanel->Refresh();
+}
+
+void MainWindow::OnTimer(wxTimerEvent& event) {
+	ComputeNextGeneration();
 }
