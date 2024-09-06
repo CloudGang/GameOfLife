@@ -44,6 +44,9 @@ public:
     // count living neighbors
     int CountLivingNeighbors(int row, int col) const;
 
+    // next gen
+    void ComputeNextGeneration();
+
     void UpdateStatusBar();
 
     wxDECLARE_EVENT_TABLE();

@@ -75,6 +75,7 @@ void MainWindow::OnPause(wxCommandEvent& event) {
 }
 
 void MainWindow::OnNext(wxCommandEvent& event) {
+	ComputeNextGeneration();
 }
 
 void MainWindow::OnClear(wxCommandEvent& event) {
@@ -109,4 +110,58 @@ int MainWindow::CountLivingNeighbors(int row, int col) const {
 	}
 
 	return livingNeighbors;
+}
+
+void MainWindow::ComputeNextGeneration() {
+
+	// create sandbox to store next generation
+	std::vector<std::vector<bool>> sandbox(gameBoard.size(), std::vector<bool>(gameBoard[0].size(), false));
+
+	// iterate over each cell in the game board
+	for (size_t row = 0; row < gameBoard.size(); ++row) {
+		for (size_t col = 0; col < gameBoard[row].size(); ++col) {
+			int livingNeighbors = CountLivingNeighbors(row, col);
+
+			// apply GoL rules
+			if (gameBoard[row][col]) {
+				
+				// living cell
+				if (livingNeighbors < 2 || livingNeighbors > 3) {
+					sandbox[row][col] = false;
+				}
+				else {
+					sandbox[row][col] = true;
+				}
+			}
+			else {
+				
+				// dead cell
+				if (livingNeighbors == 3) {
+					sandbox[row][col] = true;
+				}
+			}
+		}
+	}
+
+	// swap the sandbox with the game board
+	gameBoard.swap(sandbox);
+
+	// update living cell count
+	livingCellsCount = 0;
+	for (const auto& row : gameBoard) {
+		for (bool cell : row) {
+			if (cell) {
+				++livingCellsCount;
+			}
+		}
+	}
+
+	// update the generation count
+	++generationCount;
+
+	// update the status bar
+	UpdateStatusBar();
+
+	// refresh the drawing panel
+	drawingPanel->Refresh();
 }
