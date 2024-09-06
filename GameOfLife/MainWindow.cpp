@@ -87,3 +87,26 @@ void MainWindow::UpdateStatusBar() {
 	statusBar->SetStatusText(generationText, 0);
 	statusBar->SetStatusText(livingCellsText, 1);
 }
+
+int MainWindow::CountLivingNeighbors(int row, int col) const {
+	int livingNeighbors = 0;
+
+	// check neighboring cells
+	for (int r = row - 1; r <= row + 1; ++r) {
+		for (int c = col - 1; c <= col + 1; ++c) {
+
+			// if itself, skip
+			if (r != row || c != col) {
+
+				// check neighbor
+				if (r >= 0 && r < gameBoard.size() && c >= 0 && c < gameBoard[r].size()) {
+					if (gameBoard[r][c]) {
+						++livingNeighbors;
+					}
+				}
+			}
+		}
+	}
+
+	return livingNeighbors;
+}

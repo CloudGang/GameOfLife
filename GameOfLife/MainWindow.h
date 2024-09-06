@@ -41,6 +41,9 @@ public:
         return gameBoard; 
     }
 
+    // count living neighbors
+    int CountLivingNeighbors(int row, int col) const;
+
     void UpdateStatusBar();
 
     wxDECLARE_EVENT_TABLE();
