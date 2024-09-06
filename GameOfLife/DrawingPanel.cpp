@@ -49,9 +49,11 @@ void DrawingPanel::OnPaint(wxPaintEvent& event)
         for (int col = 0; col < gridSize; ++col) {
             int x = col * cellWidth;
             int y = row * cellHeight;
+
+            // check [ ] state and set color accordingly
             if (gameBoard[row][col]) {
                 // alive cells
-                context->SetBrush(*wxBLACK);
+                context->SetBrush(*wxLIGHT_GREY);
             }
             else {
                 // dead cells
