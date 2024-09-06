@@ -1,6 +1,9 @@
 #pragma once
 #include "wx/wx.h"
 #include "DrawingPanel.h"
+#include <vector>
+
+class wxCommandEvent;
 
 class MainWindow : public wxFrame {
 
@@ -19,12 +22,19 @@ private:
     // add a status bar variable to the main window header file 
     wxStatusBar* statusBar;
 
+    // toolbar
+    wxToolBar* toolBar;
+
 public:
     MainWindow();
     ~MainWindow();
 
     // window resizing event handler declaration
     void OnSizeChange(wxSizeEvent& event);
+    void OnPlay(wxCommandEvent& event);
+    void OnPause(wxCommandEvent& event);
+    void OnNext(wxCommandEvent& event);
+    void OnClear(wxCommandEvent& event);
 
     // access game board
     std::vector<std::vector<bool>>& GetGameBoard() { 

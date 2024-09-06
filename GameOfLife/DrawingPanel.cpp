@@ -13,13 +13,6 @@ DrawingPanel::DrawingPanel(wxWindow* parent, std::vector<std::vector<bool>>& boa
 
     // drawing panel render control
     this->SetBackgroundStyle(wxBG_STYLE_PAINT);
-
-    // wxPanel needs to know to use the OnPaint method when it renders
-    //this->Bind(wxEVT_PAINT, &DrawingPanel::OnPaint, this);
-
-    // mouse event
-    //this->Bind(wxEVT_LEFT_UP, &DrawingPanel::OnMouseUp, this);
-
 }
 
 DrawingPanel::~DrawingPanel()

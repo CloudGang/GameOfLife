@@ -140,6 +140,12 @@
     <ClInclude Include="DrawingPanel.h" />
     <ClInclude Include="MainWindow.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="next.xpm" />
+    <None Include="pause.xpm" />
+    <None Include="play.xpm" />
+    <None Include="trash.xpm" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

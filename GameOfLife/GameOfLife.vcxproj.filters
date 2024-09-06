@@ -36,4 +36,10 @@
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="next.xpm" />
+    <None Include="pause.xpm" />
+    <None Include="play.xpm" />
+    <None Include="trash.xpm" />
+  </ItemGroup>
 </Project>
