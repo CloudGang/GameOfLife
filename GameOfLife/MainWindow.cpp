@@ -79,6 +79,7 @@ void MainWindow::OnNext(wxCommandEvent& event) {
 }
 
 void MainWindow::OnClear(wxCommandEvent& event) {
+	ClearBoard();
 }
 
 void MainWindow::UpdateStatusBar() {
@@ -163,5 +164,21 @@ void MainWindow::ComputeNextGeneration() {
 	UpdateStatusBar();
 
 	// refresh the drawing panel
+	drawingPanel->Refresh();
+}
+
+void MainWindow::ClearBoard() {
+
+	// reset game board to all dead [ ]
+	for (auto& row : gameBoard) {
+		std::fill(row.begin(), row.end(), false);
+	}
+
+	// reset generation and living cells count
+	generationCount = 0;
+	livingCellsCount = 0;
+
+	UpdateStatusBar();
+
 	drawingPanel->Refresh();
 }

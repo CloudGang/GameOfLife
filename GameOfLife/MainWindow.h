@@ -47,6 +47,9 @@ public:
     // next gen
     void ComputeNextGeneration();
 
+    // clear board
+    void ClearBoard();
+
     void UpdateStatusBar();
 
     wxDECLARE_EVENT_TABLE();
