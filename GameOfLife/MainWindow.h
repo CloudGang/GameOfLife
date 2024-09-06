@@ -24,5 +24,6 @@ public:
         return gameBoard; 
     }
 
+    wxDECLARE_EVENT_TABLE();
 };
 

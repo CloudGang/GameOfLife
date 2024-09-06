@@ -1,5 +1,11 @@
 #include "MainWindow.h"
 
+
+wxBEGIN_EVENT_TABLE(MainWindow, wxFrame)
+EVT_SIZE(MainWindow::OnSizeChange)
+wxEND_EVENT_TABLE()
+
+
 // inher wxFrame
 MainWindow::MainWindow() : wxFrame(nullptr, wxID_ANY, "Game of Life", wxPoint(0, 0), wxSize(500, 500)) {
 
@@ -10,7 +16,7 @@ MainWindow::MainWindow() : wxFrame(nullptr, wxID_ANY, "Game of Life", wxPoint(0,
 	drawingPanel = new DrawingPanel(this, gameBoard);
 
 	// in the constructor for the main window, call bind using something similar to this
-	this->Bind(wxEVT_SIZE, &MainWindow::OnSizeChange, this);
+	//this->Bind(wxEVT_SIZE, &MainWindow::OnSizeChange, this);
 }
 
 MainWindow::~MainWindow() {
