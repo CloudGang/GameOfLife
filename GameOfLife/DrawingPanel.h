@@ -6,7 +6,7 @@ class DrawingPanel : public wxPanel {
 private:
     void OnPaint(wxPaintEvent& event);
 
-    // private variable in the drawing panel header file to store the grid size
+    // Add a variable for grid size (default to 15).
     int gridSize = 15;
 
 public:
@@ -16,5 +16,7 @@ public:
     // Create a method in your drawing panel header file for setting the size
     void SetSize(wxSize& size);
 
+    // Add a method to set the grid size.
+    void SetGridSize(int size);
 };
 
