@@ -7,7 +7,7 @@ wxEND_EVENT_TABLE()
 
 
 // inher wxFrame
-MainWindow::MainWindow() : wxFrame(nullptr, wxID_ANY, "Game of Life", wxPoint(0, 0), wxSize(500, 500)) {
+MainWindow::MainWindow() : wxFrame(nullptr, wxID_ANY, "Game of Life", wxPoint(0, 0), wxSize(500, 500)), generationCount(0), livingCellsCount(0) {
 
 	// initialize the game board with default values (false = dead cells)
 	gameBoard.resize(15, std::vector<bool>(15, false));
@@ -15,8 +15,14 @@ MainWindow::MainWindow() : wxFrame(nullptr, wxID_ANY, "Game of Life", wxPoint(0,
 	// ..instantiate it in the MainWindow constructor | Make sure to pass this in as the parent.
 	drawingPanel = new DrawingPanel(this, gameBoard);
 
-	// in the constructor for the main window, call bind using something similar to this
-	//this->Bind(wxEVT_SIZE, &MainWindow::OnSizeChange, this);
+	// 2 fields status bar
+	statusBar = CreateStatusBar(2);
+
+	// update the status bar
+	UpdateStatusBar();
+
+	// refresh its layout by adding this->Layout()
+	this->Layout();
 }
 
 MainWindow::~MainWindow() {
@@ -32,4 +38,12 @@ void MainWindow::OnSizeChange(wxSizeEvent& event) {
 
 	// add event.Skip() as the final line
 	event.Skip();
+}
+
+void MainWindow::UpdateStatusBar() {
+	wxString generationText = wxString::Format("Generations: %i", generationCount);
+	wxString livingCellsText = wxString::Format("Living Cells: %i", livingCellsCount);
+
+	statusBar->SetStatusText(generationText, 0);
+	statusBar->SetStatusText(livingCellsText, 1);
 }

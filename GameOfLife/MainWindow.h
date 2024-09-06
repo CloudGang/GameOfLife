@@ -12,6 +12,13 @@ private:
     // store game board
     std::vector<std::vector<bool>> gameBoard;
 
+    // status information
+    int generationCount;
+    int livingCellsCount;
+
+    // add a status bar variable to the main window header file 
+    wxStatusBar* statusBar;
+
 public:
     MainWindow();
     ~MainWindow();
@@ -23,6 +30,8 @@ public:
     std::vector<std::vector<bool>>& GetGameBoard() { 
         return gameBoard; 
     }
+
+    void UpdateStatusBar();
 
     wxDECLARE_EVENT_TABLE();
 };
