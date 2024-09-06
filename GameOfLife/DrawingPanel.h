@@ -13,5 +13,8 @@ public:
     DrawingPanel(wxWindow* parent);
     ~DrawingPanel();
 
+    // Create a method in your drawing panel header file for setting the size
+    void SetSize(wxSize& size);
+
 };
 

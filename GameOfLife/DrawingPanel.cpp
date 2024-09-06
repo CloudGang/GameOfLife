@@ -74,3 +74,12 @@ void DrawingPanel::OnPaint(wxPaintEvent& event)
     }
     delete context;
 }
+
+void DrawingPanel::SetSize(wxSize& size) {
+
+    // first call SetSize on the base wxPanel class
+    wxPanel::SetSize(size);
+
+    // "Then call Refresh();
+    Refresh();               
+}

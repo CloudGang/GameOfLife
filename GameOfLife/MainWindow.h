@@ -13,5 +13,7 @@ public:
     MainWindow();
     ~MainWindow();
 
+    // window resizing event handler declaration
+    void OnSizeChange(wxSizeEvent& event);
 };
 
