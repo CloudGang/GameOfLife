@@ -9,8 +9,8 @@ EVT_LEFT_UP(DrawingPanel::OnMouseUp)
 wxEND_EVENT_TABLE()
 
 
-DrawingPanel::DrawingPanel(wxWindow* parent, std::vector<std::vector<bool>>& board) : wxPanel(parent), gameBoard(board), gridSize(15) {
-
+DrawingPanel::DrawingPanel(wxWindow* parent, std::vector<std::vector<bool>>& board)
+    : wxPanel(parent), gridSize(15), gameBoard(board) {
     // drawing panel render control
     this->SetBackgroundStyle(wxBG_STYLE_PAINT);
 }
@@ -35,7 +35,7 @@ void DrawingPanel::OnPaint(wxPaintEvent& event)
     context->SetPen(*wxBLACK);
     context->SetBrush(*wxWHITE);
 
-    
+
     // get the size of the panel
     int panelWidth, panelHeight;
     this->GetClientSize(&panelWidth, &panelHeight);
@@ -89,5 +89,5 @@ void DrawingPanel::SetSize(wxSize& size) {
     wxPanel::SetSize(size);
 
     // "Then call Refresh();
-    Refresh();               
+    Refresh();
 }

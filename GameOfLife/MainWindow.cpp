@@ -6,12 +6,12 @@
 
 
 wxBEGIN_EVENT_TABLE(MainWindow, wxFrame)
-	EVT_SIZE(MainWindow::OnSizeChange)
-	EVT_MENU(10001, MainWindow::OnPlay)
-	EVT_MENU(10002, MainWindow::OnPause)
-	EVT_MENU(10003, MainWindow::OnNext)
-	EVT_MENU(10004, MainWindow::OnClear)
-	EVT_TIMER(TIMER_ID, MainWindow::OnTimer)
+EVT_SIZE(MainWindow::OnSizeChange)
+EVT_MENU(10001, MainWindow::OnPlay)
+EVT_MENU(10002, MainWindow::OnPause)
+EVT_MENU(10003, MainWindow::OnNext)
+EVT_MENU(10004, MainWindow::OnClear)
+EVT_TIMER(TIMER_ID, MainWindow::OnTimer)
 wxEND_EVENT_TABLE()
 
 
@@ -36,7 +36,7 @@ MainWindow::MainWindow() : wxFrame(nullptr, wxID_ANY, "Game of Life", wxPoint(0,
 	// add buttons to the toolbar
 	wxBitmap playIcon(play_xpm);
 	toolBar->AddTool(10001, "Play", playIcon);
-	// Repeat for other icons (pause, next, clear)
+	// repeat for other icons (pause, next, clear)
 	wxBitmap pauseIcon(pause_xpm);
 	toolBar->AddTool(10002, "Pause", pauseIcon);
 	wxBitmap nextIcon(next_xpm);
@@ -56,6 +56,7 @@ MainWindow::MainWindow() : wxFrame(nullptr, wxID_ANY, "Game of Life", wxPoint(0,
 
 MainWindow::~MainWindow() {
 	delete timer;
+	delete drawingPanel;
 }
 
 void MainWindow::OnSizeChange(wxSizeEvent& event) {
@@ -129,7 +130,7 @@ void MainWindow::ComputeNextGeneration() {
 
 			// apply GoL rules
 			if (gameBoard[row][col]) {
-				
+
 				// living cell
 				if (livingNeighbors < 2 || livingNeighbors > 3) {
 					sandbox[row][col] = false;
@@ -139,7 +140,7 @@ void MainWindow::ComputeNextGeneration() {
 				}
 			}
 			else {
-				
+
 				// dead cell
 				if (livingNeighbors == 3) {
 					sandbox[row][col] = true;

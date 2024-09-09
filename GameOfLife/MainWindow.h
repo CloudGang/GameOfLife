@@ -44,8 +44,8 @@ public:
     void OnTimer(wxTimerEvent& event);
 
     // access game board
-    std::vector<std::vector<bool>>& GetGameBoard() { 
-        return gameBoard; 
+    std::vector<std::vector<bool>>& GetGameBoard() {
+        return gameBoard;
     }
 
     // count living neighbors
