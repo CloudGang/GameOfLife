@@ -18,11 +18,15 @@ wxEND_EVENT_TABLE()
 // inher wxFrame
 MainWindow::MainWindow() : wxFrame(nullptr, wxID_ANY, "Game of Life", wxPoint(0, 0), wxSize(500, 500)), generationCount(0), livingCellsCount(0) {
 
-	// initialize the game board with default values (false = dead cells)
-	gameBoard.resize(15, std::vector<bool>(15, false));
+	// initialize the game board with default values (false = dead cells) - using settings grid size
+	gameBoard.resize(settings.gridSize, std::vector<bool>(settings.gridSize, false));
 
 	// ..instantiate it in the MainWindow constructor | Make sure to pass this in as the parent.
 	drawingPanel = new DrawingPanel(this, gameBoard);
+
+	// Set the settings object for DrawingPanel
+	drawingPanel->SetSettings(&settings); 
+
 
 	// 2 fields status bar
 	statusBar = CreateStatusBar(2);

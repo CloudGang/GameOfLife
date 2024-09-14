@@ -10,9 +10,14 @@ wxEND_EVENT_TABLE()
 
 
 DrawingPanel::DrawingPanel(wxWindow* parent, std::vector<std::vector<bool>>& board)
-    : wxPanel(parent), gridSize(15), gameBoard(board) {
+    : wxPanel(parent), gameBoard(board), settings(nullptr) {
     // drawing panel render control
     this->SetBackgroundStyle(wxBG_STYLE_PAINT);
+}
+
+// ??
+void DrawingPanel::SetSettings(Settings* newSettings) {
+    settings = newSettings;
 }
 
 DrawingPanel::~DrawingPanel()
@@ -41,23 +46,25 @@ void DrawingPanel::OnPaint(wxPaintEvent& event)
     this->GetClientSize(&panelWidth, &panelHeight);
 
     // cell size calculation | They need to be calculated separately.
-    int cellWidth = panelWidth / gridSize;
-    int cellHeight = panelHeight / gridSize;
+    int cellWidth = panelWidth / settings->gridSize;
+    int cellHeight = panelHeight / settings->gridSize;
 
     // create the grid
-    for (int row = 0; row < gridSize; ++row) {
-        for (int col = 0; col < gridSize; ++col) {
+    for (int row = 0; row < settings->gridSize; ++row) {
+        for (int col = 0; col < settings->gridSize; ++col) {
             int x = col * cellWidth;
             int y = row * cellHeight;
 
             // check [ ] state and set color accordingly
             if (gameBoard[row][col]) {
                 // alive cells
-                context->SetBrush(*wxLIGHT_GREY);
+                //context->SetBrush(*wxLIGHT_GREY);
+                context->SetBrush(wxBrush(settings->GetLivingCellColor()));
             }
             else {
                 // dead cells
-                context->SetBrush(*wxWHITE);
+                //context->SetBrush(*wxWHITE);
+                context->SetBrush(wxBrush(settings->GetDeadCellColor()));
             }
             context->DrawRectangle(x, y, cellWidth, cellHeight);
         }
@@ -72,6 +79,9 @@ void DrawingPanel::OnMouseUp(wxMouseEvent& event) {
     int panelWidth, panelHeight;
     this->GetClientSize(&panelWidth, &panelHeight);
 
+    // grid size
+    int gridSize = this->settings->gridSize;
+
     int cellWidth = panelWidth / gridSize;
     int cellHeight = panelHeight / gridSize;
 
@@ -79,7 +89,7 @@ void DrawingPanel::OnMouseUp(wxMouseEvent& event) {
     int col = x / cellWidth;
 
     if (row >= 0 && row < gridSize && col >= 0 && col < gridSize) {
-        gameBoard[row][col] = !gameBoard[row][col];
+        this->gameBoard[row][col] = !this->gameBoard[row][col];
         Refresh();
     }
 }

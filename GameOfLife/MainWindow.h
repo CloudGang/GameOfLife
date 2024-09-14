@@ -1,6 +1,7 @@
 #pragma once
 #include "wx/wx.h"
 #include "DrawingPanel.h"
+#include "Settings.h"
 #include <vector>
 
 class wxCommandEvent;
@@ -29,6 +30,9 @@ private:
     wxTimer* timer;
     static const int TIMER_ID = 10000;
     static const int TIMER_INTERVAL = 50;
+
+    // add settings object/should not be a pointer
+    Settings settings;
 
 
 public:
