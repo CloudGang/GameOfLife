@@ -45,13 +45,18 @@ void DrawingPanel::OnPaint(wxPaintEvent& event)
     int panelWidth, panelHeight;
     this->GetClientSize(&panelWidth, &panelHeight);
 
+    // Get grid size and colors from settings
+    int gridSize = settings->gridSize;
+    wxColor livingColor = settings->GetLivingCellColor();
+    wxColor deadColor = settings->GetDeadCellColor();
+
     // cell size calculation | They need to be calculated separately.
-    int cellWidth = panelWidth / settings->gridSize;
-    int cellHeight = panelHeight / settings->gridSize;
+    int cellWidth = panelWidth / gridSize;
+    int cellHeight = panelHeight / gridSize;
 
     // create the grid
-    for (int row = 0; row < settings->gridSize; ++row) {
-        for (int col = 0; col < settings->gridSize; ++col) {
+    for (int row = 0; row < gridSize; ++row) {
+        for (int col = 0; col < gridSize; ++col) {
             int x = col * cellWidth;
             int y = row * cellHeight;
 
@@ -59,12 +64,12 @@ void DrawingPanel::OnPaint(wxPaintEvent& event)
             if (gameBoard[row][col]) {
                 // alive cells
                 //context->SetBrush(*wxLIGHT_GREY);
-                context->SetBrush(wxBrush(settings->GetLivingCellColor()));
+                context->SetBrush(wxBrush(livingColor));
             }
             else {
                 // dead cells
                 //context->SetBrush(*wxWHITE);
-                context->SetBrush(wxBrush(settings->GetDeadCellColor()));
+                context->SetBrush(wxBrush(deadColor));
             }
             context->DrawRectangle(x, y, cellWidth, cellHeight);
         }

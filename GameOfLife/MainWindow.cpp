@@ -25,7 +25,7 @@ MainWindow::MainWindow() : wxFrame(nullptr, wxID_ANY, "Game of Life", wxPoint(0,
 	drawingPanel = new DrawingPanel(this, gameBoard);
 
 	// Set the settings object for DrawingPanel
-	drawingPanel->SetSettings(&settings); 
+	drawingPanel->SetSettings(&settings);
 
 
 	// 2 fields status bar
