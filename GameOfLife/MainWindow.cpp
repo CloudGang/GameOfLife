@@ -3,7 +3,10 @@
 #include "pause.xpm"
 #include "next.xpm"
 #include "trash.xpm"
+#include "SettingsDialog.h"
+#include "Settings.h"
 
+const int wxID_SETTINGS = 11111;
 
 wxBEGIN_EVENT_TABLE(MainWindow, wxFrame)
 EVT_SIZE(MainWindow::OnSizeChange)
@@ -12,11 +15,12 @@ EVT_MENU(10002, MainWindow::OnPause)
 EVT_MENU(10003, MainWindow::OnNext)
 EVT_MENU(10004, MainWindow::OnClear)
 EVT_TIMER(TIMER_ID, MainWindow::OnTimer)
+EVT_MENU(wxID_SETTINGS, MainWindow::OnSettings)
 wxEND_EVENT_TABLE()
 
 
 // inher wxFrame
-MainWindow::MainWindow() : wxFrame(nullptr, wxID_ANY, "Game of Life", wxPoint(0, 0), wxSize(500, 500)), generationCount(0), livingCellsCount(0) {
+MainWindow::MainWindow() : wxFrame(nullptr, wxID_ANY, "Erik-Rai's Game of Life", wxPoint(0, 0), wxSize(500, 500)), generationCount(0), livingCellsCount(0) {
 
 	// initialize the game board with default values (false = dead cells) - using settings grid size
 	gameBoard.resize(settings.gridSize, std::vector<bool>(settings.gridSize, false));
@@ -54,6 +58,17 @@ MainWindow::MainWindow() : wxFrame(nullptr, wxID_ANY, "Game of Life", wxPoint(0,
 	// timer initialize
 	timer = new wxTimer(this, TIMER_ID);
 
+	wxMenuBar* menuBar = new wxMenuBar;
+
+	// Create the Settings menu
+	wxMenu* settingsMenu = new wxMenu;
+	settingsMenu->Append(wxID_SETTINGS, "&Settings\tCtrl-S", "Open settings");
+
+	// Add the Settings menu to the menu bar
+	menuBar->Append(settingsMenu, "&File");
+
+	// Set the menu bar
+	SetMenuBar(menuBar);
 	// refresh its layout by adding this->Layout()
 	this->Layout();
 }
@@ -194,4 +209,19 @@ void MainWindow::ClearBoard() {
 
 void MainWindow::OnTimer(wxTimerEvent& event) {
 	ComputeNextGeneration();
+}
+
+void MainWindow::OnSettings(wxCommandEvent& event) {
+
+	// open settings
+	SettingsDialog dlg(this, &settings);
+	if (dlg.ShowModal() == wxID_OK) {
+		UpdateGridSettings();
+	}
+}
+
+void MainWindow::UpdateGridSettings() {
+
+	// redraws
+	Refresh();
 }

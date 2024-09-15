@@ -1,57 +1,93 @@
 #include "SettingsDialog.h"
+#include <wx/sizer.h>
 
-// Event table definition
 wxBEGIN_EVENT_TABLE(SettingsDialog, wxDialog)
-EVT_BUTTON(wxID_OK, SettingsDialog::OnOk)
+EVT_BUTTON(wxID_OK, SettingsDialog::OnOK)
 EVT_BUTTON(wxID_CANCEL, SettingsDialog::OnCancel)
 wxEND_EVENT_TABLE()
 
-// Constructor
-SettingsDialog::SettingsDialog(wxWindow* parent, wxWindowID id, const wxString& title)
-    : wxDialog(parent, id, title, wxDefaultPosition, wxSize(300, 200))
-{
-    // Main vertical sizer
+SettingsDialog::SettingsDialog(wxWindow* parent, Settings* settings) : wxDialog(parent, wxID_ANY, "Settings", wxDefaultPosition, wxSize(250, 400)), settings(settings) {
+
+    // main vertical sizer
     wxBoxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
 
-    // Spin control sizer
-    wxBoxSizer* spinSizer = new wxBoxSizer(wxHORIZONTAL);
-    wxStaticText* spinLabel = new wxStaticText(this, wxID_ANY, "Select Number:");
-    m_spinCtrl = new wxSpinCtrl(this, wxID_ANY);
-    spinSizer->Add(spinLabel, 0, wxALL | wxALIGN_CENTER_VERTICAL, 5);
-    spinSizer->Add(m_spinCtrl, 1, wxALL | wxEXPAND, 5);
-    mainSizer->Add(spinSizer, 0, wxALL | wxEXPAND, 5);
+    // grid size control
+    wxBoxSizer* gridSizeSizer = new wxBoxSizer(wxHORIZONTAL);
+    wxStaticText* gridSizeLabel = new wxStaticText(this, wxID_ANY, "Grid Size: ");
+    gridSizeCtrl = new wxSpinCtrl(this, wxID_ANY);
+    gridSizeCtrl->SetRange(5, 100);
+    gridSizeCtrl->SetValue(settings->gridSize);
+    gridSizeSizer->Add(gridSizeLabel, 1, wxEXPAND | wxALL, 5);
+    gridSizeSizer->Add(gridSizeCtrl, 1, wxEXPAND | wxALL, 5);
+    mainSizer->Add(gridSizeSizer, 0, wxEXPAND);
 
-    // Colour picker sizer
-    wxBoxSizer* colorSizer = new wxBoxSizer(wxHORIZONTAL);
-    wxStaticText* colorLabel = new wxStaticText(this, wxID_ANY, "Select Color:");
-    m_colourPicker = new wxColourPickerCtrl(this, wxID_ANY);
-    colorSizer->Add(colorLabel, 0, wxALL | wxALIGN_CENTER_VERTICAL, 5);
-    colorSizer->Add(m_colourPicker, 1, wxALL | wxEXPAND, 5);
-    mainSizer->Add(colorSizer, 0, wxALL | wxEXPAND, 5);
+    // interval control
+    wxBoxSizer* intervalSizer = new wxBoxSizer(wxHORIZONTAL);
+    wxStaticText* intervalLabel = new wxStaticText(this, wxID_ANY, "Interval (ms): ");
+    intervalCtrl = new wxSpinCtrl(this, wxID_ANY);
+    intervalCtrl->SetRange(10, 5000);
+    intervalCtrl->SetValue(settings->interval);
+    intervalSizer->Add(intervalLabel, 1, wxEXPAND | wxALL, 5);
+    intervalSizer->Add(intervalCtrl, 1, wxEXPAND | wxALL, 5);
+    mainSizer->Add(intervalSizer, 0, wxEXPAND);
 
-    // OK and Cancel button sizer
+    // generations control
+    wxBoxSizer* generationsSizer = new wxBoxSizer(wxHORIZONTAL);
+    wxStaticText* generationsLabel = new wxStaticText(this, wxID_ANY, "Generations: ");
+    generationsCtrl = new wxSpinCtrl(this, wxID_ANY);
+    generationsCtrl->SetRange(10, 1000);
+    generationsCtrl->SetValue(settings->numGenerations);
+    generationsSizer->Add(generationsLabel, 1, wxEXPAND | wxALL, 5);
+    generationsSizer->Add(generationsCtrl, 1, wxEXPAND | wxALL, 5);
+    mainSizer->Add(generationsSizer, 0, wxEXPAND);
+
+    // living color picker
+    wxBoxSizer* livingColorSizer = new wxBoxSizer(wxHORIZONTAL);
+    wxStaticText* livingColorLabel = new wxStaticText(this, wxID_ANY, "Living Cell Color: ");
+    livingColorPicker = new wxColourPickerCtrl(this, wxID_ANY, settings->GetLivingCellColor());
+    livingColorSizer->Add(livingColorLabel, 1, wxEXPAND | wxALL, 5);
+    livingColorSizer->Add(livingColorPicker, 1, wxEXPAND | wxALL, 5);
+    mainSizer->Add(livingColorSizer, 0, wxEXPAND);
+
+    // dead color picker
+    wxBoxSizer* deadColorSizer = new wxBoxSizer(wxHORIZONTAL);
+    wxStaticText* deadColorLabel = new wxStaticText(this, wxID_ANY, "Dead Cell Color: ");
+    deadColorPicker = new wxColourPickerCtrl(this, wxID_ANY, settings->GetDeadCellColor());
+    deadColorSizer->Add(deadColorLabel, 1, wxEXPAND | wxALL, 5);
+    deadColorSizer->Add(deadColorPicker, 1, wxEXPAND | wxALL, 5);
+    mainSizer->Add(deadColorSizer, 0, wxEXPAND);
+
+    // grid color picker
+    wxBoxSizer* gridColorSizer = new wxBoxSizer(wxHORIZONTAL);
+    wxStaticText* gridColorLabel = new wxStaticText(this, wxID_ANY, "Grid Color: ");
+    gridColorPicker = new wxColourPickerCtrl(this, wxID_ANY, settings->GetGridColor());
+    gridColorSizer->Add(gridColorLabel, 1, wxEXPAND | wxALL, 5);
+    gridColorSizer->Add(gridColorPicker, 1, wxEXPAND | wxALL, 5);
+    mainSizer->Add(gridColorSizer, 0, wxEXPAND);
+
+    // ok and Cancel buttons
     wxSizer* buttonSizer = CreateButtonSizer(wxOK | wxCANCEL);
-    mainSizer->Add(buttonSizer, 0, wxALL | wxALIGN_CENTER, 10);
+    mainSizer->Add(buttonSizer, 0, wxALIGN_CENTER | wxALL, 10);
 
-    // Set the main sizer
     SetSizer(mainSizer);
 }
 
-// OK button event handler
-void SettingsDialog::OnOk(wxCommandEvent& event)
-{
-    // Apply settings (store the selected values in settings object)
-    // For example:
-    // settings->SetValue(m_spinCtrl->GetValue());
-    // settings->SetColor(m_colourPicker->GetColour());
+void SettingsDialog::OnOK(wxCommandEvent& event) {
 
-    // Close the dialog
+    // saving the settings
+    settings->gridSize = gridSizeCtrl->GetValue();
+    settings->interval = intervalCtrl->GetValue();
+    settings->numGenerations = generationsCtrl->GetValue();
+    settings->SetLivingCellColor(livingColorPicker->GetColour());
+    settings->SetDeadCellColor(deadColorPicker->GetColour());
+    settings->SetGridColor(gridColorPicker->GetColour());
+
+    // close dialog
     EndModal(wxID_OK);
 }
 
-// Cancel button event handler
-void SettingsDialog::OnCancel(wxCommandEvent& event)
-{
-    // Close the dialog without saving changes
+void SettingsDialog::OnCancel(wxCommandEvent& event) {
+    
+    // obvious
     EndModal(wxID_CANCEL);
 }

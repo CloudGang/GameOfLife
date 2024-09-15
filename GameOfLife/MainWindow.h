@@ -30,9 +30,12 @@ private:
     wxTimer* timer;
     static const int TIMER_ID = 10000;
     static const int TIMER_INTERVAL = 50;
+    static const int wxID_SETTINGS = 11111;
 
     // add settings object/should not be a pointer
     Settings settings;
+    void OnSettings(wxCommandEvent& event);
+    void UpdateGridSettings();
 
 
 public:
