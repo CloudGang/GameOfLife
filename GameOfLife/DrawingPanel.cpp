@@ -22,6 +22,7 @@ void DrawingPanel::SetSettings(Settings* newSettings) {
 
 DrawingPanel::~DrawingPanel()
 {
+
 }
 
 void DrawingPanel::OnPaint(wxPaintEvent& event)
@@ -37,8 +38,11 @@ void DrawingPanel::OnPaint(wxPaintEvent& event)
     }
 
     // control over some colors [ Pen = the Stroke | Brush = the Fill ]
-    context->SetPen(*wxBLACK);
-    context->SetBrush(*wxWHITE);
+    //context->SetPen(*wxBLACK);
+    //context->SetBrush(*wxWHITE);
+
+    wxPen gridPen(settings->GetGridColor(), 1);
+    context->SetPen(gridPen);
 
 
     // get the size of the panel
@@ -50,8 +54,8 @@ void DrawingPanel::OnPaint(wxPaintEvent& event)
     int cellHeight = panelHeight / settings->gridSize;
 
     // create the grid
-    for (int row = 0; row < settings->gridSize; ++row) {
-        for (int col = 0; col < settings->gridSize; ++col) {
+    for (unsigned int row = 0; row < settings->gridSize; ++row) {
+        for (unsigned int col = 0; col < settings->gridSize; ++col) {
             int x = col * cellWidth;
             int y = row * cellHeight;
 

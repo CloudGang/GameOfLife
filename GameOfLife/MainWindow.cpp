@@ -22,6 +22,9 @@ wxEND_EVENT_TABLE()
 // inher wxFrame
 MainWindow::MainWindow() : wxFrame(nullptr, wxID_ANY, "Erik-Rai's Game of Life", wxPoint(0, 0), wxSize(500, 500)), generationCount(0), livingCellsCount(0) {
 
+	// load settings
+	settings.Load();
+
 	// initialize the game board with default values (false = dead cells) - using settings grid size
 	gameBoard.resize(settings.gridSize, std::vector<bool>(settings.gridSize, false));
 
@@ -76,6 +79,13 @@ MainWindow::MainWindow() : wxFrame(nullptr, wxID_ANY, "Erik-Rai's Game of Life",
 MainWindow::~MainWindow() {
 	delete timer;
 	delete drawingPanel;
+	delete toolBar;
+	if (statusBar) {
+		delete statusBar;
+	}
+	if (GetMenuBar()) {
+		delete GetMenuBar();
+	}
 }
 
 void MainWindow::OnSizeChange(wxSizeEvent& event) {
@@ -217,6 +227,7 @@ void MainWindow::OnSettings(wxCommandEvent& event) {
 	SettingsDialog dlg(this, &settings);
 	if (dlg.ShowModal() == wxID_OK) {
 		UpdateGridSettings();
+		drawingPanel->Refresh();
 	}
 }
 

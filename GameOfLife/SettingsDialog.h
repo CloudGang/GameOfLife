@@ -8,6 +8,7 @@ class SettingsDialog : public wxDialog {
 public:
 
     SettingsDialog(wxWindow* parent, Settings* settings);
+    ~SettingsDialog();
 
 private:
 

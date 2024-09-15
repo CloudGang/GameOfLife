@@ -1,6 +1,7 @@
 #pragma once
 #include "wx/wx.h"
 #include <wx/colour.h>
+#include <fstream>
 
 struct Settings {
     // Colors for living and dead cells
@@ -60,5 +61,23 @@ struct Settings {
 
     void SetGridColor(const wxColour& color) {
         gridColor = color;
+    }
+
+    // save settings to file
+    void Save() const {
+        std::ofstream file("settings.bin", std::ios::out | std::ios::binary);
+        if (file.is_open()) {
+            file.write(reinterpret_cast<const char*>(this), sizeof(Settings));
+            file.close();
+        }
+    }
+
+    // load the settings from file
+    void Load() {
+        std::ifstream file("settings.bin", std::ios::binary | std::ios::in);
+        if (file.is_open()) {
+            file.read(reinterpret_cast<char*>(this), sizeof(Settings));
+            file.close();
+        }
     }
 };
