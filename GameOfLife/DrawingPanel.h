@@ -16,9 +16,10 @@ private:
     Settings* settings;
 
     std::vector<std::vector<bool>>& gameBoard;
+    std::vector<std::vector<int>>& neighborCount;
 
 public:
-    DrawingPanel(wxWindow* parent, std::vector<std::vector<bool>>& board);
+    DrawingPanel(wxWindow* parent, std::vector<std::vector<bool>>& board, std::vector<std::vector<int>>& count);
     ~DrawingPanel();
 
     // Create a method in your drawing panel header file for setting the size
@@ -26,6 +27,8 @@ public:
 
     // create a setter for the settings pointer
     void SetSettings(Settings* settings);
+
+    void SetNeighborCount(const std::vector<std::vector<int>>& count);
 
     wxDECLARE_EVENT_TABLE();
 

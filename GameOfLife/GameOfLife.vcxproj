@@ -144,6 +144,7 @@
     <ClInclude Include="SettingsDialog.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="neighbor.xpm" />
     <None Include="next.xpm" />
     <None Include="pause.xpm" />
     <None Include="play.xpm" />

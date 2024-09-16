@@ -50,5 +50,6 @@
     <None Include="pause.xpm" />
     <None Include="play.xpm" />
     <None Include="trash.xpm" />
+    <None Include="neighbor.xpm" />
   </ItemGroup>
 </Project>

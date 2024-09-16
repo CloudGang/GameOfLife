@@ -5,6 +5,7 @@
 #include "trash.xpm"
 #include "SettingsDialog.h"
 #include "Settings.h"
+#include "neighbor.xpm"
 
 const int wxID_SETTINGS = 11111;
 
@@ -16,20 +17,29 @@ EVT_MENU(10003, MainWindow::OnNext)
 EVT_MENU(10004, MainWindow::OnClear)
 EVT_TIMER(TIMER_ID, MainWindow::OnTimer)
 EVT_MENU(wxID_SETTINGS, MainWindow::OnSettings)
+EVT_MENU(22222, MainWindow::OnNeighborCount)
 wxEND_EVENT_TABLE()
 
 
 // inher wxFrame
 MainWindow::MainWindow() : wxFrame(nullptr, wxID_ANY, "Erik-Rai's Game of Life", wxPoint(0, 0), wxSize(500, 500)), generationCount(0), livingCellsCount(0) {
+	this->SetBackgroundStyle(wxBG_STYLE_PAINT);
+
+	wxIcon icon;
+	icon.LoadFile("logo.ico", wxBITMAP_TYPE_ICO);
+
+	// Set the icon for the window
+	SetIcon(icon);
 
 	// load settings
 	settings.Load();
 
 	// initialize the game board with default values (false = dead cells) - using settings grid size
 	gameBoard.resize(settings.gridSize, std::vector<bool>(settings.gridSize, false));
+	neighborCount.resize(settings.gridSize, std::vector<int>(settings.gridSize, 0));
 
 	// ..instantiate it in the MainWindow constructor | Make sure to pass this in as the parent.
-	drawingPanel = new DrawingPanel(this, gameBoard);
+	drawingPanel = new DrawingPanel(this, gameBoard, neighborCount);
 
 	// Set the settings object for DrawingPanel
 	drawingPanel->SetSettings(&settings);
@@ -54,6 +64,8 @@ MainWindow::MainWindow() : wxFrame(nullptr, wxID_ANY, "Erik-Rai's Game of Life",
 	toolBar->AddTool(10003, "Next", nextIcon);
 	wxBitmap clearIcon(trash_xpm);
 	toolBar->AddTool(10004, "Clear", clearIcon);
+	wxBitmap neighborIcon(neighbor_xpm);
+	toolBar->AddTool(22222, "Count", neighborIcon);
 
 	// finalize toolbar setup
 	toolBar->Realize();
@@ -65,10 +77,21 @@ MainWindow::MainWindow() : wxFrame(nullptr, wxID_ANY, "Erik-Rai's Game of Life",
 
 	// Create the Settings menu
 	wxMenu* settingsMenu = new wxMenu;
+
+	settingsMenu->Append(10001, "Play\tCtrl-P", "Play");
+	settingsMenu->Append(10002, "Pause\tCtrl-S", "Pause");
+	settingsMenu->Append(10003, "Next\tCtrl-N", "Next");
+	settingsMenu->Append(00000, " ", " ");
 	settingsMenu->Append(wxID_SETTINGS, "&Settings\tCtrl-S", "Open settings");
+
+	wxMenu* viewMenu = new wxMenu;
+	wxMenuItem* showNeighborCountItem = new wxMenuItem(viewMenu, 22222, "&Count\tCtrl-C", "View Neighbor Count", wxITEM_CHECK);
+	showNeighborCountItem->SetCheckable(true);
+	viewMenu->Append(showNeighborCountItem);
 
 	// Add the Settings menu to the menu bar
 	menuBar->Append(settingsMenu, "&File");
+	menuBar->Append(viewMenu, "&View");
 
 	// Set the menu bar
 	SetMenuBar(menuBar);
@@ -80,12 +103,8 @@ MainWindow::~MainWindow() {
 	delete timer;
 	delete drawingPanel;
 	delete toolBar;
-	if (statusBar) {
-		delete statusBar;
-	}
-	if (GetMenuBar()) {
-		delete GetMenuBar();
-	}
+	delete statusBar;
+	delete GetMenuBar();
 }
 
 void MainWindow::OnSizeChange(wxSizeEvent& event) {
@@ -194,6 +213,8 @@ void MainWindow::ComputeNextGeneration() {
 	// update the generation count
 	++generationCount;
 
+	UpdateNeighborCount();
+
 	// update the status bar
 	UpdateStatusBar();
 
@@ -212,6 +233,7 @@ void MainWindow::ClearBoard() {
 	generationCount = 0;
 	livingCellsCount = 0;
 
+	UpdateNeighborCount();
 	UpdateStatusBar();
 
 	drawingPanel->Refresh();
@@ -235,4 +257,20 @@ void MainWindow::UpdateGridSettings() {
 
 	// redraws
 	Refresh();
+}
+
+void MainWindow::OnNeighborCount(wxCommandEvent& event) {
+	bool showNeighborCount = event.IsChecked();
+	settings.showNeighborCount = showNeighborCount;
+	settings.Save();
+	drawingPanel->Refresh();
+}
+
+void MainWindow::UpdateNeighborCount() {
+	neighborCount.resize(settings.gridSize, std::vector<int>(settings.gridSize, 0));
+	for (size_t row = 0; row < gameBoard.size(); ++row) {
+		for (size_t col = 0; col < gameBoard[row].size(); ++col) {
+			neighborCount[row][col] = CountLivingNeighbors(row, col);
+		}
+	}
 }

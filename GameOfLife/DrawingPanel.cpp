@@ -9,20 +9,23 @@ EVT_LEFT_UP(DrawingPanel::OnMouseUp)
 wxEND_EVENT_TABLE()
 
 
-DrawingPanel::DrawingPanel(wxWindow* parent, std::vector<std::vector<bool>>& board)
-    : wxPanel(parent), gameBoard(board), settings(nullptr) {
-    // drawing panel render control
+DrawingPanel::DrawingPanel(wxWindow* parent, std::vector<std::vector<bool>>& board, std::vector<std::vector<int>>& count) : wxPanel(parent), gameBoard(board), neighborCount(count) {
     this->SetBackgroundStyle(wxBG_STYLE_PAINT);
+    settings = nullptr;
 }
 
 // settingsssssss
-void DrawingPanel::SetSettings(Settings* newSettings) {
-    settings = newSettings;
+void DrawingPanel::SetSettings(Settings* settings) {
+    this->settings = settings;
 }
 
 DrawingPanel::~DrawingPanel()
 {
 
+}
+
+void DrawingPanel::SetNeighborCount(const std::vector<std::vector<int>>& count) {
+    neighborCount = count;
 }
 
 void DrawingPanel::OnPaint(wxPaintEvent& event)
@@ -54,8 +57,8 @@ void DrawingPanel::OnPaint(wxPaintEvent& event)
     int cellHeight = panelHeight / settings->gridSize;
 
     // create the grid
-    for (unsigned int row = 0; row < settings->gridSize; ++row) {
-        for (unsigned int col = 0; col < settings->gridSize; ++col) {
+    for (size_t row = 0; row < gameBoard.size(); ++row) {
+        for (size_t col = 0; col < gameBoard[row].size(); ++col) {
             int x = col * cellWidth;
             int y = row * cellHeight;
 
@@ -71,7 +74,22 @@ void DrawingPanel::OnPaint(wxPaintEvent& event)
                 context->SetBrush(wxBrush(settings->GetDeadCellColor()));
             }
             context->DrawRectangle(x, y, cellWidth, cellHeight);
+
+            if (settings->showNeighborCount) {
+                wxString text = wxString::Format("%d", neighborCount[row][col]);
+                dc.SetTextForeground(*wxWHITE);
+                dc.DrawText(text, col * cellWidth + 2, row * cellHeight + 2);
+            }
         }
+    }
+    wxSize size = GetClientSize();
+
+    dc.SetPen(wxPen(settings->gridColor, 1));
+    for (size_t row = 0; row <= gameBoard.size(); ++row) {
+        dc.DrawLine(0, row * cellHeight, size.GetWidth(), row * cellHeight);
+    }
+    for (size_t col = 0; col <= gameBoard[0].size(); ++col) {
+        dc.DrawLine(col * cellWidth, 0, col * cellWidth, size.GetHeight());
     }
     delete context;
 }

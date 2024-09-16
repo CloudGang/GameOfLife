@@ -37,7 +37,7 @@ SettingsDialog::SettingsDialog(wxWindow* parent, Settings* settings) : wxDialog(
     // interval control
     wxBoxSizer* intervalSizer = new wxBoxSizer(wxHORIZONTAL);
     wxStaticText* intervalLabel = new wxStaticText(this, wxID_ANY, "Interval (ms): ");
-    intervalCtrl->SetRange(10, 5001);
+    intervalCtrl->SetRange(10, 5000);
     intervalSizer->Add(intervalLabel, 1, wxEXPAND | wxALL, 5);
     intervalSizer->Add(intervalCtrl, 1, wxEXPAND | wxALL, 5);
     mainSizer->Add(intervalSizer, 0, wxEXPAND);
@@ -46,7 +46,7 @@ SettingsDialog::SettingsDialog(wxWindow* parent, Settings* settings) : wxDialog(
     wxBoxSizer* generationsSizer = new wxBoxSizer(wxHORIZONTAL);
     wxStaticText* generationsLabel = new wxStaticText(this, wxID_ANY, "Generations: ");
     generationsCtrl = new wxSpinCtrl(this, wxID_ANY);
-    generationsCtrl->SetRange(10, 1001);
+    generationsCtrl->SetRange(10, 1000);
     generationsSizer->Add(generationsLabel, 1, wxEXPAND | wxALL, 5);
     generationsSizer->Add(generationsCtrl, 1, wxEXPAND | wxALL, 5);
     mainSizer->Add(generationsSizer, 0, wxEXPAND);

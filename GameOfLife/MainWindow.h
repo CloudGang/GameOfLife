@@ -4,6 +4,7 @@
 #include "Settings.h"
 #include <vector>
 
+
 class wxCommandEvent;
 
 class MainWindow : public wxFrame {
@@ -15,6 +16,8 @@ private:
 
     // store game board
     std::vector<std::vector<bool>> gameBoard;
+
+    std::vector<std::vector<int>> neighborCountGrid;
 
     // status information
     int generationCount;
@@ -31,12 +34,18 @@ private:
     static const int TIMER_ID = 10000;
     static const int TIMER_INTERVAL = 50;
     static const int wxID_SETTINGS = 11111;
+    static const int ID_SHOW_NEIGHBOR_COUNT = 20000;
+
+    std::vector<std::vector<int>> neighborCount;
+
+    void OnNeighborCount(wxCommandEvent& event);
+
+    // Update grid settings
+    void UpdateGridSettings();
 
     // add settings object/should not be a pointer
     Settings settings;
     void OnSettings(wxCommandEvent& event);
-    void UpdateGridSettings();
-
 
 public:
     MainWindow();
@@ -65,6 +74,12 @@ public:
     void ClearBoard();
 
     void UpdateStatusBar();
+
+    void UpdateNeighborCount();
+
+    const std::vector<std::vector<int>>& GetNeighborCount() const {
+        return neighborCount;
+    }
 
     wxDECLARE_EVENT_TABLE();
 };

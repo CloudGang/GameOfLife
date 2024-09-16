@@ -23,6 +23,8 @@ struct Settings {
     int numGenerations = 100;
     wxColour gridColor = *wxBLACK;
 
+    bool showNeighborCount = false;
+
     // Returns wxColor based on RGBA values
     wxColor GetLivingCellColor() const {
         return wxColor(livingRed, livingGreen, livingBlue, livingAlpha);
